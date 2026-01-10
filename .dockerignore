@@ -1,0 +1,12 @@
+README.md
+test_examples.txt
+.git
+.gitignore
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.coverage
+*.md
+
