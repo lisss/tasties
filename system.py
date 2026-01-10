@@ -1,6 +1,6 @@
 import os
-import psycopg2
-from typing import List, Optional
+import psycopg2  # type: ignore
+from typing import List
 
 
 class Order:

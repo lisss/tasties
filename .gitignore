@@ -3,11 +3,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.pytest_cache/
-.coverage
-*.egg-info/
-dist/
-build/
 .DS_Store
 *.db
 docker-data/
