@@ -1,5 +1,12 @@
 import sys
+from enum import Enum
 from system import System
+
+
+class Command(Enum):
+    SELL = "sell"
+    BUY = "buy"
+    CLEAR = "clear"
 
 
 def main():
@@ -17,7 +24,7 @@ def main():
 
             command = parts[0]
 
-            if command == "clear":
+            if command == Command.CLEAR.value:
                 system.clear_all()
                 continue
 
@@ -32,9 +39,9 @@ def main():
             except ValueError:
                 continue
 
-            if command == "sell":
+            if command == Command.SELL.value:
                 system.sell(sku, quantity)
-            elif command == "buy":
+            elif command == Command.BUY.value:
                 system.buy(sku, quantity)
 
     except KeyboardInterrupt:

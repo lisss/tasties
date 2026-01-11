@@ -1,21 +1,19 @@
-# 🍷 Selling & buying spirits (I believe Shiraz & Talisker would be the very choice 😊)
+# 🍷 Selling & buying spirits
+_(I believe Shiraz & Talisker would be the very choice 😊)_
 
-**The business logic:** we do store and consume the stuff cronologically (FIFO): first that was sold is 
+## Basic business logic
+We do store and consume the stuff cronologically (FIFO): first that was sold is 
 the first that would be bought
 
-## Architecture and the approach
+## Architecture
 ![Diagram](./public/arch_diagram.jpg)
 
 ### Order (the receipt)
-Every time you sell or buy something, we create a "receipt" that remembers:
-- What happened (sold or bought)
-- What product (wine, whisky, etc.)
-- How much (the number you typed)
-- How much is left (only matters for sell orders)
+Every time you sell or buy something, we create a receipt according to our inventory schema (order type, sku, quantity, remaining)
 
-So, it means:
-- Each `sell` creates a new order with inventory
-- Each `buy` consumes from the earliest `sell` orders
+E.g.:
+- `sell` creates a new order
+- `buy` consumes from the earliest `sell` orders
 - After every command, status is either `remaining:<count>` or `closed`
 
 ### Examples:
@@ -55,7 +53,7 @@ docker-compose up -d
 # the docker also inits the DB for the sake of some persistence,the SQL script it stored at scripts/init_db.sql
 
 # connect to the client
-docker-compose exec inventory ./client.sh
+docker-compose exec inventory ./scripts/client.sh
 ```
 
 ### What's inside
@@ -88,3 +86,12 @@ The sample output would be solmething like
 ```bash
 client:> clear
 ```
+
+## Testing
+
+```bash
+# run tests
+docker-compose exec inventory bash scripts/run_tests.sh
+```
+
+The idea is to automate testing of the very basic operations, because we can never be sure that thing wouldn't break onw day. The ideal solution is CI, but I don't have time for that right now :(

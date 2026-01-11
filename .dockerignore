@@ -9,3 +9,5 @@ __pycache__/
 *.db
 docker-data/
 README.md
+public/
+.pytest_cache/
