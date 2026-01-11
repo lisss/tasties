@@ -52,6 +52,8 @@ The service uses Docker, and we are sure you're familiar with it (or any other c
 docker-compose build
 docker-compose up -d
 
+# the docker also inits the DB for the sake of some persistence,the SQL script it stored at scripts/init_db.sql
+
 # connect to the client
 docker-compose exec inventory ./client.sh
 ```

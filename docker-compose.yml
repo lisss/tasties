@@ -8,6 +8,7 @@ services:
       POSTGRES_PASSWORD: ferovinum
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./scripts/init_db.sql:/init_db.sql # inits the sample DB
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ferovinum"]
       interval: 5s

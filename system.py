@@ -33,23 +33,7 @@ class System:
             password=os.getenv("DB_PASSWORD", "ferovinum"),
         )
         self.orders: List[Order] = []
-        self._init_db()
         self._load_orders()
-
-    def _init_db(self) -> None:
-        cursor = self.conn.cursor()
-        cursor.execute(
-            """
-            CREATE TABLE IF NOT EXISTS orders (
-                id SERIAL PRIMARY KEY,
-                order_type TEXT NOT NULL,
-                sku TEXT NOT NULL,
-                quantity INTEGER NOT NULL,
-                remaining INTEGER NOT NULL
-            )
-            """
-        )
-        self.conn.commit()
 
     def _load_orders(self) -> None:
         cursor = self.conn.cursor()
@@ -79,7 +63,7 @@ class System:
             print(f"system:< {order}")
 
     def sell(self, sku: str, quantity: int) -> None:
-        if quantity <= 0 or quantity > self.MAX_QUANTITY:
+        if quantity <= 0 or quantity > MAX_QUANTITY:
             self._print_all_orders()
             return
 
@@ -89,7 +73,7 @@ class System:
         self._print_all_orders()
 
     def buy(self, sku: str, quantity: int) -> None:
-        if quantity <= 0 or quantity > self.MAX_QUANTITY:
+        if quantity <= 0 or quantity > MAX_QUANTITY:
             self._print_all_orders()
             return
 
