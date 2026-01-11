@@ -1,46 +1,75 @@
-# Selling & buying spirits (I believe Shiraz & Talisker would be the choice :))
-We do store and consume the stuff cronologically (FIFO): first that was sold is the first that would be bought
+# 🍷 Selling & buying spirits (I believe Shiraz & Talisker would be the very choice 😊)
 
-## How to run it locally
+**The business logic:** we do store and consume the stuff cronologically (FIFO): first that was sold is 
+the first that would be bought
 
-We use Docker
+## Architecture and the approach
+![Diagram](./public/arch_diagram.jpg)
 
-**Start the services:**
+### Order (the receipt)
+Every time you sell or buy something, we create a "receipt" that remembers:
+- What happened (sold or bought)
+- What product (wine, whisky, etc.)
+- How much (the number you typed)
+- How much is left (only matters for sell orders)
+
+So, it means:
+- Each `sell` creates a new order with inventory
+- Each `buy` consumes from the earliest `sell` orders
+- After every command, status is either `remaining:<count>` or `closed`
+
+### Examples:
 ```bash
-docker-compose build
-docker-compose up -d
-```
+Day 1: You sell us 1000 bottles of wine (Order #1)
+Day 2: You sell us 500 more bottles (Order #2)
+Day 3: You want to buy back 1200 bottles
 
-**Connect to the client:**
-```bash
-docker-compose exec inventory ./test.sh
-```
+# ℹ️ examples of the input and output
 
-## Examples of the input and output
-
-### Sell
-```
+# >>> sell
 client:> sell wine 1000
 system:< sell wine 1000 remaining:1000
 
 client:> sell whisky 100
 system:< sell wine 1000 remaining:1000
 system:< sell whisky 100 remaining:100
-```
 
-### Buy
-```
+# >>> buy
 client:> buy wine 500
 system:< sell wine 1000 remaining:500
 system:< sell whisky 100 remaining:100
 system:< buy wine 500 closed
 ```
 
-### Check DB
+## Tech details
+
+### How to run it locally
+
+The service uses Docker, and we are sure you're familiar with it (or any other containerized solution)
+
+```bash
+# start the services
+docker-compose build
+docker-compose up -d
+
+# connect to the client
+docker-compose exec inventory ./client.sh
+```
+
+### What's inside
+- `client.py` - the input. it just simply parses the input and sends the commands to the core module (`system`) to process
+- `system.py` - the core thing that does the stuff:
+    - works with orders (buy, sell)
+    - manages the DB (initialise, load the data, clear the data)
+
+### A few tips
+
+#### Check DB
 ```bash
 docker-compose exec db psql -U ferovinum -d inventory -c "SELECT * FROM orders;"
 ```
 The sample output would be solmething like
+
 ```bash
  id | order_type |  sku   | quantity | remaining
 ----+------------+--------+----------+-----------
@@ -53,20 +82,7 @@ The sample output would be solmething like
 (6 rows)
 ```
 
-### Clear Database
+#### Clear DB
 ```bash
 client:> clear
 ```
-
-## How It Works
-
-- Each `sell` creates a new order with inventory
-- Each `buy` consumes from the earliest `sell` orders
-- After every command, status is either `remaining:<count>` or `closed`
-
-## Architecture
-
-- **PostgreSQL** - DB
-- **client.py** - input shell
-- **system.py** - output
-- **scripts/test.sh** - a test script to check the behaviour

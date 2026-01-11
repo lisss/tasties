@@ -3,6 +3,7 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_DB: inventory
+      # this is not secure, but we'll keep it for now as it's a demo project
       POSTGRES_USER: ferovinum
       POSTGRES_PASSWORD: ferovinum
     volumes:

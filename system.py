@@ -2,6 +2,8 @@ import os
 import psycopg2  # type: ignore
 from typing import List
 
+MAX_QUANTITY = 1000000
+
 
 class Order:
     def __init__(
@@ -23,8 +25,6 @@ class Order:
 
 
 class System:
-    MAX_QUANTITY = 1000000
-
     def __init__(self):
         self.conn = psycopg2.connect(
             host=os.getenv("DB_HOST", "localhost"),

@@ -8,7 +8,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY client.py system.py ./
-COPY scripts/test.sh ./test.sh
-RUN chmod +x test.sh
+COPY scripts/client.sh ./client.sh
+RUN chmod +x client.sh
 
-CMD ["/bin/bash", "test.sh"]
+CMD ["/bin/bash", "client.sh"]
