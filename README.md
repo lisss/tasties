@@ -90,8 +90,7 @@ client:> clear
 ## Testing
 
 ```bash
-# run tests
 docker-compose exec inventory bash scripts/run_tests.sh
 ```
 
-The idea is to automate testing of the very basic operations, because we can never be sure that thing wouldn't break onw day. The ideal solution is CI, but I don't have time for that right now :(
+The idea is to automate testing of the very basic operations, because we can never be sure that thing wouldn't break one day. The ideal solution is CI, but I don't have time for that right now :(
