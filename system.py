@@ -2,8 +2,6 @@ import os
 import psycopg2  # type: ignore
 from typing import List
 
-MAX_QUANTITY = 1000000
-
 
 class Order:
     def __init__(
@@ -25,7 +23,13 @@ class Order:
 
 
 class System:
+    """
+    ⚠️ it's better to use the beauty of some ORM instead of plain SQL scripts execution,
+    but let's keep it for now as is (TODO: refactor ASAP!)
+    """
+
     def __init__(self):
+        # ⚠️ it's insecure! need to get connection details only from the env vars
         self.conn = psycopg2.connect(
             host=os.getenv("DB_HOST", "localhost"),
             database=os.getenv("DB_NAME", "inventory"),
@@ -63,7 +67,7 @@ class System:
             print(f"system:< {order}")
 
     def sell(self, sku: str, quantity: int) -> None:
-        if quantity <= 0 or quantity > MAX_QUANTITY:
+        if quantity <= 0:
             self._print_all_orders()
             return
 
@@ -73,7 +77,7 @@ class System:
         self._print_all_orders()
 
     def buy(self, sku: str, quantity: int) -> None:
-        if quantity <= 0 or quantity > MAX_QUANTITY:
+        if quantity <= 0:
             self._print_all_orders()
             return
 

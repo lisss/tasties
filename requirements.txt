@@ -1,2 +1,4 @@
+# sorry, there was a requirement to NOT use any libs,
+# but i must use testing lib for tests and the one that makes connections to the DB, so sorry for that..
 pytest==7.4.3
 psycopg2-binary==2.9.9

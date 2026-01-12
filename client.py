@@ -12,27 +12,29 @@ class Command(Enum):
 def main():
     system = System()
 
+    # i honestly asked the Internet about how to implement accepting input and providing an output,
+    # since i never did that before
     try:
         for line in sys.stdin:
             line = line.strip()
             if not line:
                 continue
 
-            parts = line.split()
-            if len(parts) < 1:
+            cli_input_string = line.split()
+            if len(cli_input_string) < 1:
                 continue
 
-            command = parts[0]
+            command = cli_input_string[0]
 
             if command == Command.CLEAR.value:
                 system.clear_all()
                 continue
 
-            if len(parts) != 3:
+            if len(cli_input_string) != 3:
                 continue
 
-            sku = parts[1]
-            quantity_str = parts[2]
+            sku = cli_input_string[1]
+            quantity_str = cli_input_string[2]
 
             try:
                 quantity = int(quantity_str)
@@ -47,6 +49,7 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
+        # we need to stop it anyway, even if we failed to do other things
         system.close()
 
 
